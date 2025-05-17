@@ -78,70 +78,29 @@ impl LookupOp {
         x: &[Tensor<F>],
     ) -> Result<ForwardResult<F>, TensorError> {
         let x = x[0].clone().map(|x| felt_to_integer_rep(x));
-        let res =
-            match &self {
-                LookupOp::Ln { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::ln(&x, scale.into()))
-                }
-                LookupOp::PowersOfTwo { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::ipow2(&x, scale.0.into()))
-                }
-                LookupOp::IsOdd => Ok::<_, TensorError>(tensor::ops::nonlinearities::is_odd(&x)),
-                LookupOp::Pow { scale, a } => Ok::<_, TensorError>(
-                    tensor::ops::nonlinearities::pow(&x, scale.0.into(), a.0.into()),
-                ),
-                LookupOp::Div { denom } => Ok::<_, TensorError>(
-                    tensor::ops::nonlinearities::const_div(&x, f32::from(*denom).into()),
-                ),
-                LookupOp::Sigmoid { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::sigmoid(&x, scale.into()))
-                }
-                LookupOp::Erf { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::erffunc(&x, scale.into()))
-                }
-                LookupOp::Exp { scale, base } => Ok::<_, TensorError>(
-                    tensor::ops::nonlinearities::exp(&x, scale.into(), base.into()),
-                ),
-                LookupOp::Cos { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::cos(&x, scale.into()))
-                }
-                LookupOp::ACos { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::acos(&x, scale.into()))
-                }
-                LookupOp::Cosh { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::cosh(&x, scale.into()))
-                }
-                LookupOp::ACosh { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::acosh(&x, scale.into()))
-                }
-                LookupOp::Sin { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::sin(&x, scale.into()))
-                }
-                LookupOp::ASin { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::asin(&x, scale.into()))
-                }
-                LookupOp::Sinh { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::sinh(&x, scale.into()))
-                }
-                LookupOp::ASinh { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::asinh(&x, scale.into()))
-                }
-                LookupOp::Tan { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::tan(&x, scale.into()))
-                }
-                LookupOp::ATan { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::atan(&x, scale.into()))
-                }
-                LookupOp::ATanh { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::atanh(&x, scale.into()))
-                }
-                LookupOp::Tanh { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::tanh(&x, scale.into()))
-                }
-                LookupOp::HardSwish { scale } => {
-                    Ok::<_, TensorError>(tensor::ops::nonlinearities::hardswish(&x, scale.into()))
-                }
-            }?;
+        let res = match &self {
+            LookupOp::Ln { scale } => Ok(tensor::ops::nonlinearities::ln(&x, scale.into())),
+            LookupOp::PowersOfTwo { scale } => Ok(tensor::ops::nonlinearities::ipow2(&x, scale.0.into())),
+            LookupOp::IsOdd => Ok(tensor::ops::nonlinearities::is_odd(&x)),
+            LookupOp::Pow { scale, a } => Ok(tensor::ops::nonlinearities::pow(&x, scale.0.into(), a.0.into())),
+            LookupOp::Div { denom } => Ok(tensor::ops::nonlinearities::const_div(&x, f32::from(*denom).into())),
+            LookupOp::Sigmoid { scale } => Ok(tensor::ops::nonlinearities::sigmoid(&x, scale.into())),
+            LookupOp::Erf { scale } => Ok(tensor::ops::nonlinearities::erffunc(&x, scale.into())),
+            LookupOp::Exp { scale, base } => Ok(tensor::ops::nonlinearities::exp(&x, scale.into(), base.into())),
+            LookupOp::Cos { scale } => Ok(tensor::ops::nonlinearities::cos(&x, scale.into())),
+            LookupOp::ACos { scale } => Ok(tensor::ops::nonlinearities::acos(&x, scale.into())),
+            LookupOp::Cosh { scale } => Ok(tensor::ops::nonlinearities::cosh(&x, scale.into())),
+            LookupOp::ACosh { scale } => Ok(tensor::ops::nonlinearities::acosh(&x, scale.into())),
+            LookupOp::Sin { scale } => Ok(tensor::ops::nonlinearities::sin(&x, scale.into())),
+            LookupOp::ASin { scale } => Ok(tensor::ops::nonlinearities::asin(&x, scale.into())),
+            LookupOp::Sinh { scale } => Ok(tensor::ops::nonlinearities::sinh(&x, scale.into())),
+            LookupOp::ASinh { scale } => Ok(tensor::ops::nonlinearities::asinh(&x, scale.into())),
+            LookupOp::Tan { scale } => Ok(tensor::ops::nonlinearities::tan(&x, scale.into())),
+            LookupOp::ATan { scale } => Ok(tensor::ops::nonlinearities::atan(&x, scale.into())),
+            LookupOp::ATanh { scale } => Ok(tensor::ops::nonlinearities::atanh(&x, scale.into())),
+            LookupOp::Tanh { scale } => Ok(tensor::ops::nonlinearities::tanh(&x, scale.into())),
+            LookupOp::HardSwish { scale } => Ok(tensor::ops::nonlinearities::hardswish(&x, scale.into())),
+        }?;
 
         let output = res.map(|x| integer_rep_to_felt(x));
 
