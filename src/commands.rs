@@ -949,6 +949,15 @@ pub enum Commands {
         #[arg(value_hint = clap::ValueHint::Other, short='v', long)]
         version: Option<String>,
     },
+    /// Optimizes the model
+    Optimize {
+        /// The path to the .onnx model file
+        #[arg(short = 'M', long, default_value = DEFAULT_MODEL, value_hint = clap::ValueHint::FilePath)]
+        model: Option<PathBuf>,
+        /// The path to save the optimized model file
+        #[arg(short = 'O', long, default_value = "optimized_model.onnx", value_hint = clap::ValueHint::FilePath)]
+        output: Option<PathBuf>,
+    },
 }
 
 impl Commands {
@@ -961,4 +970,17 @@ impl Commands {
     pub fn from_json(json: &str) -> Self {
         serde_json::from_str(json).unwrap()
     }
+}
+
+pub fn optimize_model(model_path: &PathBuf, output_path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    // Load the model
+    let mut model = crate::graph::model::Model::load(model_path.clone())?;
+
+    // Optimize the model
+    model.optimize()?;
+
+    // Save the optimized model
+    model.save(output_path.clone())?;
+
+    Ok(())
 }

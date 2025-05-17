@@ -1611,4 +1611,12 @@ impl Model {
         }
         Ok(instance_types)
     }
+
+    /// Optimizes the model
+    pub fn optimize(&mut self) -> Result<(), GraphError> {
+        // Implement the optimization logic here
+        // For example, you can perform graph optimizations, constant folding, etc.
+        // This is a placeholder implementation, replace it with your actual optimization logic
+        Ok(())
+    }
 }
